@@ -1,0 +1,6 @@
+.git
+.changelog
+.tools
+**/node_modules
+talks
+*.md

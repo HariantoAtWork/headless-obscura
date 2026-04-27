@@ -1,0 +1,9 @@
+{
+  "name": "obscura-headless-browser-alpine",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "obscura:install": "bun run scripts/obscura-install.mjs",
+    "obscura:serve": "bun run scripts/obscura-server.mjs"
+  }
+}
