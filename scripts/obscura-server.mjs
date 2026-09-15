@@ -4,8 +4,9 @@
  *
  * Prerequisite: run `bun run obscura:install`, put Obscura on PATH, or set OBSCURA_BIN.
  * Usage:
- *   bun run scripts/obscura-server.mjs [--port 9222] [--no-stealth] [--workers 1]
+ *   bun run scripts/obscura-server.mjs [--host 0.0.0.0] [--port 9222] [--no-stealth] [--workers 1]
  *
+ * Bind host comes from --host, else HOST, else OBSCURA_HOST (Obscura default is 127.0.0.1).
  * Any extra flags are passed through to `obscura serve`.
  */
 import { spawn } from 'node:child_process'
@@ -13,6 +14,7 @@ import { findObscuraBinary, obscuraInstallHint } from './utils/obscuraBinary.mjs
 
 function parseArgs(argv) {
   const out = {
+    host: process.env.HOST || process.env.OBSCURA_HOST || '',
     port: process.env.OBSCURA_PORT || '9222',
     stealth: process.env.OBSCURA_STEALTH !== '0',
     workers: process.env.OBSCURA_WORKERS || '',
@@ -21,6 +23,13 @@ function parseArgs(argv) {
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index]
+    if (arg === '--host') {
+      const value = argv[index + 1]
+      if (!value) throw new Error('Missing value for --host')
+      out.host = value
+      index += 1
+      continue
+    }
     if (arg === '--port') {
       const value = argv[index + 1]
       if (!value) throw new Error('Missing value for --port')
@@ -50,6 +59,7 @@ function main() {
   const bin = findObscuraBinary()
   const serveArgs = ['serve', '--port', args.port]
 
+  if (args.host) serveArgs.push('--host', args.host)
   if (args.stealth) serveArgs.push('--stealth')
   if (args.workers) serveArgs.push('--workers', args.workers)
   serveArgs.push(...args.extra)

@@ -8,3 +8,8 @@ services:
       - cloudflared
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    ports:
+      - "9222:9222"
+      - "9223:9223"
+    environment:
+      - HOST=0.0.0.0
