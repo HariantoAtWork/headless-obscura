@@ -1,0 +1,11 @@
+# docker compose -f _push.yml build --no-cache --push
+# Obscura publishes linux x86_64 only — no arm64 Hub variant yet.
+# Multi-arch cannot be loaded into the local Docker engine; use _build.yml for local images.
+services:
+  headless-obscura:
+    build:
+      context: .
+      dockerfile: Dockerfile.platform
+      platforms:
+        - linux/amd64
+    image: harianto/headless-obscura:latest

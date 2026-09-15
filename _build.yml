@@ -1,0 +1,8 @@
+# docker compose -f _build.yml build
+services:
+  headless-obscura:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: harianto/headless-obscura:latest
+    platform: linux/amd64

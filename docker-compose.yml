@@ -1,14 +1,13 @@
 services:
-  obscura:
-    container_name: obscura-headless
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: obscura-headless:alpine-bun
+  headless-obscura:
+    container_name: headless-obscura
+    image: ${DOCKERHUB_USERNAME:-harianto}/headless-obscura:latest
     platform: linux/amd64
     ports:
       - "${OBSCURA_HOST_PORT:-9222}:9222"
     environment:
       OBSCURA_PORT: "${OBSCURA_PORT:-9222}"
       OBSCURA_INTERNAL_PORT: "${OBSCURA_INTERNAL_PORT:-9223}"
+    # Chromium-family browsers are happier with more than Docker’s default 64 MiB /dev/shm
+    shm_size: "1gb"
     restart: unless-stopped
